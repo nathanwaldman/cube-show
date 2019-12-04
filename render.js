@@ -6,13 +6,13 @@ let camera, scene, renderer, controls;
 let pieces = []
 let currentPiece = 0
 
+let texture = new THREE.TextureLoader().load('crate.gif')
+let material = new THREE.MeshBasicMaterial({ map: texture })
+
 init()
 animate()
 
 function init() {
-  var texture = new THREE.TextureLoader().load('crate.gif')
-  var material = new THREE.MeshBasicMaterial({ map: texture })
-
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
   camera.position.z = 100
 
@@ -20,8 +20,8 @@ function init() {
 
   function createPiece(rx, ry, rz, bx, by, bz, e) {
     function createBox(x, y, z) {
-      var geometry = new THREE.BoxGeometry(size, size, size)
-      var mesh = new THREE.Mesh(geometry, material)
+      let geometry = new THREE.BoxGeometry(size, size, size)
+      let mesh = new THREE.Mesh(geometry, material)
       mesh.position.x = x * size
       mesh.position.y = y * size
       mesh.position.z = z * size
