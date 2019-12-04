@@ -68,7 +68,7 @@ function init() {
 
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
-  renderer.setSize(window.innerWidth - 100, window.innerHeight - 100)
+  renderer.setSize(window.innerWidth, window.innerHeight)
   document.body.appendChild(renderer.domElement)
 
   controls = new THREE.OrbitControls(camera, renderer.domElement)
@@ -91,7 +91,7 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
 
-  renderer.setSize(window.innerWidth - 100, window.innerHeight - 100)
+  renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
 
