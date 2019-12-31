@@ -4,7 +4,7 @@ let camera, scene, renderer, controls;
 let pieces = []
 let currentPiece = 0
 
-let texture = new THREE.TextureLoader().load('../texture/crate.gif')
+let texture = new THREE.TextureLoader().load('texture/crate.gif')
 let material = new THREE.MeshBasicMaterial({ map: texture })
 
 window.onload = init
