@@ -4,11 +4,10 @@ let camera, scene, renderer, controls;
 let pieces = []
 let currentPiece = 0
 
-let texture = new THREE.TextureLoader().load('crate.gif')
+let texture = new THREE.TextureLoader().load('../texture/crate.gif')
 let material = new THREE.MeshBasicMaterial({ map: texture })
 
-init()
-animate()
+window.onload = init
 
 function init() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
@@ -64,10 +63,9 @@ function init() {
     return createPiece(rootX, rootY, rootZ, bumpX, bumpY, bumpZ, extent)
   })
 
-  renderer = new THREE.WebGLRenderer({ antialias: true })
+  renderer = new THREE.WebGLRenderer({ antialias: true, canvas: document.querySelector('#c') })
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
-  document.body.appendChild(renderer.domElement)
 
   controls = new THREE.OrbitControls(camera, renderer.domElement)
   controls.update();
@@ -75,6 +73,7 @@ function init() {
   window.addEventListener('resize', onWindowResize, false)
   onDocumentKeyDown()
   window.addEventListener('keydown', onDocumentKeyDown, false)
+  animate()
 }
 
 function onDocumentKeyDown(event) {
