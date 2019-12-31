@@ -4,8 +4,8 @@ let camera, scene, renderer, controls;
 let pieces = []
 let currentPiece = 0
 
-let texture = new THREE.TextureLoader().load('texture/crate.gif')
-let material = new THREE.MeshBasicMaterial({ map: texture })
+const texture = new THREE.TextureLoader().load('texture/crate.gif')
+const material = new THREE.MeshPhongMaterial({ map: texture })
 
 window.onload = init
 
@@ -14,6 +14,17 @@ function init() {
   camera.position.z = 100
 
   scene = new THREE.Scene()
+
+  function letThereBeLight(x, y, z) {
+    const color = 0xFFFFFF
+    const intensity = 1
+    const light = new THREE.DirectionalLight(color, intensity)
+    light.position.set(x, y, z)
+    scene.add(light)
+  }
+
+  letThereBeLight(-1,  2,  4)
+  letThereBeLight( 1, -1, -2)
 
   function createPiece(rx, ry, rz, bx, by, bz, e) {
     function createBox(x, y, z) {
@@ -50,7 +61,7 @@ function init() {
     return geometry
   }
 
-  const readCoordinate = (string) => {
+  function readCoordinate(string) {
     values = string.split(',')
     return values.map(Number)
   }
