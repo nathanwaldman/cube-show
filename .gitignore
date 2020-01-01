@@ -2,3 +2,7 @@
 *.txt
 *.iml
 lib/three.js
+
+texture/1.gif
+texture/2.jpg
+texture/3.jpg

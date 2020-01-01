@@ -1,10 +1,10 @@
 const size = 10
 
-let camera, scene, renderer, controls;
+let camera, scene, renderer, controls
 let pieces = []
 let currentPiece = 0
 
-const texture = new THREE.TextureLoader().load('texture/crate.gif')
+const texture = new THREE.TextureLoader().load('texture/wood.gif')
 const material = new THREE.MeshPhongMaterial({ map: texture })
 
 window.onload = init
@@ -19,7 +19,7 @@ function init() {
     const color = 0xFFFFFF
     const intensity = 1
     const light = new THREE.DirectionalLight(color, intensity)
-    light.position.set(x, y, z)
+    light.position.set(x * size, y * size, z * size)
     scene.add(light)
   }
 
@@ -37,22 +37,19 @@ function init() {
       return mesh
     }
 
+    
+
     const boxes = []
     boxes.push(createBox(rx, ry, rz))
     for (let i = 1; i < 4; i++) {
-      if (e === "+X") {
-        boxes.push(createBox(rx + i, ry, rz))
+      const argumentsByExtent = {
+        "+X": [rx + i, ry, rz],
+        "+Y": [rx, ry + i, rz],
+        "+Z": [rx, ry, rz + i],
       }
-      else if (e === "+Y") {
-        boxes.push(createBox(rx, ry + i, rz))
-      }
-      else if (e === "+Z") {
-        boxes.push(createBox(rx, ry, rz + i))
-      }
-      else {
-        console.error("Unrecognized extent:", e)
-      }
+      boxes.push(createBox(...argumentsByExtent[e]))
     }
+
     boxes.push(createBox(bx, by, bz))
     let geometry = new THREE.Geometry()
     boxes.forEach(box => {
@@ -71,7 +68,7 @@ function init() {
     const [root, extent, bump] = pieceLocation.split(';')
     const [rootX, rootY, rootZ] = readCoordinate(root)
     const [bumpX, bumpY, bumpZ] = readCoordinate(bump)
-    return createPiece(rootX, rootY, rootZ, bumpX, bumpY, bumpZ, extent)
+    return new THREE.Mesh(createPiece(rootX, rootY, rootZ, bumpX, bumpY, bumpZ, extent), material)
   })
 
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: document.querySelector('#c') })
@@ -82,15 +79,32 @@ function init() {
   controls.update();
 
   window.addEventListener('resize', onWindowResize, false)
-  onDocumentKeyDown()
-  window.addEventListener('keydown', onDocumentKeyDown, false)
+  window.addEventListener('keydown', onKey, false)
+  addPiece()
   animate()
 }
 
-function onDocumentKeyDown(event) {
+function onKey(keyboardEvent) {
+  if(keyboardEvent.key === "ArrowLeft") {
+    removePiece()
+  }
+  else if(keyboardEvent.key === "ArrowRight") {
+    addPiece()
+  }
+  return false
+}
+
+function addPiece() {
   if (currentPiece < pieces.length) {
-    scene.add(new THREE.Mesh(pieces[currentPiece], material))
+    scene.add(pieces[currentPiece])
     currentPiece++
+  }
+}
+
+function removePiece() {
+  if(currentPiece > 0) {
+    currentPiece--
+    scene.remove(pieces[currentPiece])
   }
 }
 
@@ -104,9 +118,9 @@ function onWindowResize() {
 
 
 function animate() {
-  requestAnimationFrame(animate)
-
   controls.update()
 
   renderer.render(scene, camera)
+
+  requestAnimationFrame(animate)
 }
